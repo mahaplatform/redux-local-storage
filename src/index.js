@@ -11,7 +11,7 @@ export default (client = defaultClient) => {
 
   return store => next => action => {
 
-    const [string, namespace, type] = action.type.match(/([\a-z0-9_\.]*)?\/?([A-Z0-9_]*)/)
+    const [, namespace, type] = action.type.match(/([\a-z0-9_\.]*)?\/?([A-Z0-9_]*)/)
 
     switch (type) {
 

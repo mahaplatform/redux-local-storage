@@ -36,7 +36,6 @@ exports.default = function () {
       return function (action) {
         var _action$type$match = action.type.match(/([\a-z0-9_\.]*)?\/?([A-Z0-9_]*)/),
             _action$type$match2 = _slicedToArray(_action$type$match, 3),
-            string = _action$type$match2[0],
             namespace = _action$type$match2[1],
             type = _action$type$match2[2];
 
