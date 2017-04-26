@@ -1,4 +1,4 @@
-# redux-api-request
+# redux-local-storage
 
 <a href="https://circleci.com/gh/thinktopography/redux-api-request">
   <img src="https://img.shields.io/circleci/project/thinktopography/redux-api-request.svg?maxAge=600" alt="Build Status" >

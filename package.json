@@ -1,6 +1,6 @@
 {
   "name": "redux-local-storage",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Redux middleware for accessing local storage",
   "main": "dist/index.js",
   "scripts": {
