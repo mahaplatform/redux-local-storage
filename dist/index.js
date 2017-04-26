@@ -10,6 +10,10 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _localforage = require('localforage');
+
+var _localforage2 = _interopRequireDefault(_localforage);
+
 var _action_types = require('./action_types');
 
 var actionTypes = _interopRequireWildcard(_action_types);
@@ -18,7 +22,15 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (localforage) {
+var defaultClient = _localforage2.default.createInstance({
+  name: 'local',
+  storeName: 'cache'
+});
+
+exports.default = function () {
+  var client = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultClient;
+
+
   return function (store) {
     return function (next) {
       return function (action) {
@@ -40,7 +52,7 @@ exports.default = function (localforage) {
               });
             });
 
-            return localforage.setItem(action.key, action.value, function (err, value) {
+            return client.setItem(action.key, action.value, function (err, value) {
 
               if (err) {
                 coerceArray(action.failure).map(function (failureAction) {
@@ -68,7 +80,7 @@ exports.default = function (localforage) {
               });
             });
 
-            return localforage.getItem(action.key, function (err, value) {
+            return client.getItem(action.key, function (err, value) {
 
               if (err) {
                 coerceArray(action.failure).map(function (failureAction) {
@@ -96,7 +108,7 @@ exports.default = function (localforage) {
               });
             });
 
-            return localforage.removeItem(action.key, function (err, value) {
+            return client.removeItem(action.key, function (err, value) {
 
               if (err) {
                 coerceArray(action.failure).map(function (failureAction) {

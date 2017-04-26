@@ -1,103 +1,113 @@
 import _ from 'lodash'
+import localforage from 'localforage'
 import * as actionTypes from './action_types'
 
-export default localforage => store => next => action => {
+const defaultClient = localforage.createInstance({
+  name: 'local',
+  storeName: 'cache'
+})
 
-  const [string, namespace, type] = action.type.match(/([\a-z0-9_\.]*)?\/?([A-Z0-9_]*)/)
+export default (client = defaultClient) => {
 
-  switch (type) {
+  return store => next => action => {
 
-  case actionTypes.LOCAL_SET:
+    const [string, namespace, type] = action.type.match(/([\a-z0-9_\.]*)?\/?([A-Z0-9_]*)/)
 
-    coerceArray(action.request).map(requestAction => {
-      store.dispatch({
-        type: withNamespace(namespace, requestAction),
-        key: action.key,
-        value: action.value
+    switch (type) {
+
+    case actionTypes.LOCAL_SET:
+
+      coerceArray(action.request).map(requestAction => {
+        store.dispatch({
+          type: withNamespace(namespace, requestAction),
+          key: action.key,
+          value: action.value
+        })
       })
-    })
 
-    return localforage.setItem(action.key, action.value, (err, value) => {
+      return client.setItem(action.key, action.value, (err, value) => {
 
-      if(err) {
-        coerceArray(action.failure).map(failureAction => {
+        if(err) {
+          coerceArray(action.failure).map(failureAction => {
+            store.dispatch({
+              type: withNamespace(namespace, failureAction),
+              err
+            })
+          })
+        }
+
+        coerceArray(action.success).map(successAction => {
           store.dispatch({
-            type: withNamespace(namespace, failureAction),
-            err
+            type: withNamespace(namespace, successAction),
+            value
           })
         })
-      }
 
-      coerceArray(action.success).map(successAction => {
+      })
+
+    case actionTypes.LOCAL_GET:
+
+      coerceArray(action.request).map(requestAction => {
         store.dispatch({
-          type: withNamespace(namespace, successAction),
-          value
-        })
-      })
-
-    })
-
-  case actionTypes.LOCAL_GET:
-
-    coerceArray(action.request).map(requestAction => {
-      store.dispatch({
-        type: withNamespace(namespace, requestAction),
-        key: action.key
-      })
-    })
-
-    return localforage.getItem(action.key, (err, value) => {
-
-      if(err) {
-        coerceArray(action.failure).map(failureAction => {
-          store.dispatch({
-            type: withNamespace(namespace, failureAction),
-            err
-          })
-        })
-      }
-
-      coerceArray(action.success).map(successAction => {
-        store.dispatch({
-          type: withNamespace(namespace, successAction),
-          value
-        })
-      })
-
-    })
-
-  case actionTypes.LOCAL_REMOVE:
-
-    coerceArray(action.request).map(requestAction => {
-      store.dispatch({
-        type: withNamespace(namespace, requestAction),
-        key: action.key
-      })
-    })
-
-    return localforage.removeItem(action.key, (err, value) => {
-
-      if(err) {
-        coerceArray(action.failure).map(failureAction => {
-          store.dispatch({
-            type: `${namespace}/${failureAction}`,
-            err
-          })
-        })
-      }
-
-      coerceArray(action.success).map(successAction => {
-        store.dispatch({
-          type: `${namespace}/${successAction}`,
+          type: withNamespace(namespace, requestAction),
           key: action.key
         })
       })
 
-    })
+      return client.getItem(action.key, (err, value) => {
 
-  default:
+        if(err) {
+          coerceArray(action.failure).map(failureAction => {
+            store.dispatch({
+              type: withNamespace(namespace, failureAction),
+              err
+            })
+          })
+        }
 
-    return next(action)
+        coerceArray(action.success).map(successAction => {
+          store.dispatch({
+            type: withNamespace(namespace, successAction),
+            value
+          })
+        })
+
+      })
+
+    case actionTypes.LOCAL_REMOVE:
+
+      coerceArray(action.request).map(requestAction => {
+        store.dispatch({
+          type: withNamespace(namespace, requestAction),
+          key: action.key
+        })
+      })
+
+      return client.removeItem(action.key, (err, value) => {
+
+        if(err) {
+          coerceArray(action.failure).map(failureAction => {
+            store.dispatch({
+              type: `${namespace}/${failureAction}`,
+              err
+            })
+          })
+        }
+
+        coerceArray(action.success).map(successAction => {
+          store.dispatch({
+            type: `${namespace}/${successAction}`,
+            key: action.key
+          })
+        })
+
+      })
+
+    default:
+
+      return next(action)
+
+    }
 
   }
 
