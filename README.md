@@ -28,25 +28,25 @@ import { LOCAL_GET, LOCAL_SET, LOCAL_REMOVE } from 'redux-local-storage/action_t
 export const getSession = () => ({
   type: LOCAL_GET,
   key: 'session',
-  request: actionTypes.GET_SESSION_REQUEST,
-  success: actionTypes.GET_SESSION_SUCCESS,
-  failure: actionTypes.GET_SESSION_FAILURE
+  request: GET_SESSION_REQUEST,
+  success: GET_SESSION_SUCCESS,
+  failure: GET_SESSION_FAILURE
 })
 
 export const setSession = (session) => ({
   type: LOCAL_SET,
   key: 'session',
   value: session,
-  request: actionTypes.SET_SESSION_REQUEST,
-  success: actionTypes.SET_SESSION_SUCCESS,
-  failure: actionTypes.SET_SESSION_FAILURE
+  request: SET_SESSION_REQUEST,
+  success: SET_SESSION_SUCCESS,
+  failure: SET_SESSION_FAILURE
 })
 
 export const removeSession = () => ({
   type: LOCAL_REMOVE,
   key: 'session',
-  request: actionTypes.REMOVE_SESSION_REQUEST,
-  success: actionTypes.REMOVE_SESSION_SUCCESS,
-  failure: actionTypes.REMOVE_SESSION_FAILURE
+  request: REMOVE_SESSION_REQUEST,
+  success: REMOVE_SESSION_SUCCESS,
+  failure: REMOVE_SESSION_FAILURE
 })
 ```
