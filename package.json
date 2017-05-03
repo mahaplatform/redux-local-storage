@@ -1,6 +1,6 @@
 {
   "name": "redux-local-storage",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Redux middleware for accessing local storage",
   "main": "dist/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thinktopography/redux-local-storage.git"
+    "url": "git+https://github.com/mahaplatform/redux-local-storage.git"
   },
   "author": "Greg Kops <greg@thinktopography.com>",
   "maintainers": [
@@ -26,10 +26,7 @@
     "async"
   ],
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/thinktopography/redux-local-storage/issues"
-  },
-  "homepage": "https://github.com/thinktopography/redux-local-storage#readme",
+  "homepage": "https://github.com/mahaplatform/redux-local-storage#readme",
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
