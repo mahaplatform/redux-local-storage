@@ -1,13 +1,13 @@
 # redux-local-storage
 
-<a href="https://circleci.com/gh/thinktopography/redux-api-request">
-  <img src="https://img.shields.io/circleci/project/thinktopography/redux-api-request.svg?maxAge=600" alt="Build Status" >
+<a href="https://circleci.com/gh/mahaplatform/redux-local-storage">
+  <img src="https://img.shields.io/circleci/project/mahaplatform/redux-local-storage.svg?maxAge=600" alt="Build Status" >
 </a>
-<a href="https://codeclimate.com/github/thinktopography/redux-api-request">
-  <img src="https://img.shields.io/codeclimate/github/thinktopography/redux-api-request.svg?maxAge=600" alt="Code Climate" />
+<a href="https://codeclimate.com/github/mahaplatform/redux-local-storage">
+  <img src="https://img.shields.io/codeclimate/github/mahaplatform/redux-local-storage.svg?maxAge=600" alt="Code Climate" />
 </a>
-<a href="https://codeclimate.com/github/thinktopography/redux-api-request/coverage">
-  <img src="https://img.shields.io/codeclimate/coverage/github/thinktopography/redux-api-request.svg?maxAge=600" alt="Code Coverage" />
+<a href="https://codeclimate.com/github/mahaplatform/redux-local-storage/coverage">
+  <img src="https://img.shields.io/codeclimate/coverage/github/mahaplatform/redux-local-storage.svg?maxAge=600" alt="Code Coverage" />
 </a>
 
 Redux middleware for accessing local storage
