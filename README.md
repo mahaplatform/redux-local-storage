@@ -23,6 +23,21 @@ npm install --save redux-api-request
 Using redux-local-storage in your application is easy:
 
 ```javascript
+# install middleware
+import createLocalStorage from 'redux-local-storage'
+import thunkMiddleware from 'redux-thunk'
+import reducer from './reducer'
+
+const localStorageMiddleware = createLocalStorage()
+
+const createStoreWithMiddleware = applyMiddleware(
+  thunkMiddleware,
+  localStorageMiddleware
+)(createStore)
+
+const store = createStoreWithMiddleware(reducer)
+
+# action creator
 import { LOCAL_GET, LOCAL_SET, LOCAL_REMOVE } from 'redux-local-storage/action_types'
 
 export const getSession = () => ({
@@ -50,3 +65,11 @@ export const removeSession = () => ({
   failure: REMOVE_SESSION_FAILURE
 })
 ```
+
+[View example app](https://github.com/mahaplatform/redux-local-storage/tree/master/example)
+
+## Author & Credits
+
+redux-local-storage was originally written by [Greg Kops](https://github.com/mochini) and
+is based upon his work with [Think Topography](http://thinktopography.com) and
+[The Cornell Cooperative Extension of Tompkins County](http://ccetompkins.org)
