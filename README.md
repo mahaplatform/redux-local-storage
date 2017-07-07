@@ -1,4 +1,4 @@
-# redux-local-storage
+<img src="https://raw.githubusercontent.com/mahaplatform/redux-local-storage/master/docs/logo.png" title="Redux Local Storage" alt="Redux Local Storage"/>
 
 <a href="https://circleci.com/gh/mahaplatform/redux-local-storage">
   <img src="https://img.shields.io/circleci/project/mahaplatform/redux-local-storage.svg?maxAge=600" alt="Build Status" >
