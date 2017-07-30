@@ -1,4 +1,3 @@
-
 import { expect } from 'chai'
 
 import localMiddleware from './index'
@@ -59,23 +58,29 @@ describe('local middleware', () => {
       value: 'bar'
     }
 
-    const errorAction = {
+    const failureAction = {
       type: 'foo/LOCAL_SET',
       key: 'err',
       value: 'err'
     }
 
-    it('dispatches as single request', (done) =>  dispatchSingleAction(successAction, 'request', done))
+    it('dispatches as single request', (done) =>  dispatchesSingleAction(successAction, 'request', done))
 
-    it('dispatches as mulitple request', (done) =>  dispatchMultipleActions(successAction, 'request', done))
+    it('dispatches as mulitple request', (done) =>  dispatchesMultipleActions(successAction, 'request', done))
 
-    it('dispatches as single success', (done) =>  dispatchSingleAction(successAction, 'success', done))
+    it('dispatches as single success', (done) =>  dispatchesSingleAction(successAction, 'success', done))
 
-    it('dispatches as mulitple success', (done) =>  dispatchMultipleActions(successAction, 'success', done))
+    it('dispatches as mulitple success', (done) =>  dispatchesMultipleActions(successAction, 'success', done))
 
-    it('dispatches as single failure', (done) =>  dispatchSingleAction(errorAction, 'failure', done))
+    it('dispatches as single failure', (done) =>  dispatchesSingleAction(failureAction, 'failure', done))
 
-    it('dispatches as mulitple failure', (done) =>  dispatchMultipleActions(errorAction, 'failure', done))
+    it('dispatches as mulitple failure', (done) =>  dispatchesMultipleActions(failureAction, 'failure', done))
+
+    it('request returns appropriate value', (done) => returnsAppropriateValue(successAction, 'request', { key: 'foo', value: 'bar' }, done))
+
+    it('success returns appropriate value', (done) => returnsAppropriateValue(successAction, 'success', { value: 'bar' }, done))
+
+    it('failure returns appropriate value', (done) => returnsAppropriateValue(failureAction, 'failure', { err: 'err' }, done))
 
   })
 
@@ -86,22 +91,28 @@ describe('local middleware', () => {
       key: 'foo'
     }
 
-    const errorAction = {
+    const failureAction = {
       type: 'foo/LOCAL_GET',
       key: 'err'
     }
 
-    it('dispatches as single request', (done) =>  dispatchSingleAction(successAction, 'request', done))
+    it('dispatches as single request', (done) =>  dispatchesSingleAction(successAction, 'request', done))
 
-    it('dispatches as mulitple request', (done) =>  dispatchMultipleActions(successAction, 'request', done))
+    it('dispatches as mulitple request', (done) =>  dispatchesMultipleActions(successAction, 'request', done))
 
-    it('dispatches as single success', (done) =>  dispatchSingleAction(successAction, 'success', done))
+    it('dispatches as single success', (done) =>  dispatchesSingleAction(successAction, 'success', done))
 
-    it('dispatches as mulitple success', (done) =>  dispatchMultipleActions(successAction, 'success', done))
+    it('dispatches as mulitple success', (done) =>  dispatchesMultipleActions(successAction, 'success', done))
 
-    it('dispatches as single failure', (done) =>  dispatchSingleAction(errorAction, 'failure', done))
+    it('dispatches as single failure', (done) =>  dispatchesSingleAction(failureAction, 'failure', done))
 
-    it('dispatches as mulitple failure', (done) =>  dispatchMultipleActions(errorAction, 'failure', done))
+    it('dispatches as mulitple failure', (done) =>  dispatchesMultipleActions(failureAction, 'failure', done))
+
+    it('request returns appropriate value', (done) => returnsAppropriateValue(successAction, 'request', { key: 'foo' }, done))
+
+    it('success returns appropriate value', (done) => returnsAppropriateValue(successAction, 'success', { value: 'bar' }, done))
+
+    it('failure returns appropriate value', (done) => returnsAppropriateValue(failureAction, 'failure', { err: 'err' }, done))
 
   })
 
@@ -112,28 +123,66 @@ describe('local middleware', () => {
       key: 'foo'
     }
 
-    const errorAction = {
+    const failureAction = {
       type: 'foo/LOCAL_REMOVE',
       key: 'err'
     }
 
-    it('dispatches as single request', (done) =>  dispatchSingleAction(successAction, 'request', done))
+    it('dispatches as single request', (done) =>  dispatchesSingleAction(successAction, 'request', done))
 
-    it('dispatches as mulitple request', (done) =>  dispatchMultipleActions(successAction, 'request', done))
+    it('dispatches as mulitple request', (done) =>  dispatchesMultipleActions(successAction, 'request', done))
 
-    it('dispatches as single success', (done) =>  dispatchSingleAction(successAction, 'success', done))
+    it('dispatches as single success', (done) =>  dispatchesSingleAction(successAction, 'success', done))
 
-    it('dispatches as mulitple success', (done) =>  dispatchMultipleActions(successAction, 'success', done))
+    it('dispatches as mulitple success', (done) =>  dispatchesMultipleActions(successAction, 'success', done))
 
-    it('dispatches as single failure', (done) =>  dispatchSingleAction(errorAction, 'failure', done))
+    it('dispatches as single failure', (done) =>  dispatchesSingleAction(failureAction, 'failure', done))
 
-    it('dispatches as mulitple failure', (done) =>  dispatchMultipleActions(errorAction, 'failure', done))
+    it('dispatches as mulitple failure', (done) =>  dispatchesMultipleActions(failureAction, 'failure', done))
+
+    it('request returns appropriate value', (done) => returnsAppropriateValue(successAction, 'request', { key: 'foo' }, done))
+
+    it('success returns appropriate value', (done) => returnsAppropriateValue(successAction, 'success', {}, done))
+
+    it('failure returns appropriate value', (done) => returnsAppropriateValue(failureAction, 'failure', { err: 'err' }, done))
 
   })
 
 })
 
-const dispatchSingleAction = (action, actionType, done) => {
+const returnsAppropriateValue = (action, type, value, done) => {
+
+  const store = {
+
+    dispatch: (action) => {
+
+      if(action.type === `foo/${type.toUpperCase()}`) {
+
+        expect(action).to.eql({
+          type: `foo/${type.toUpperCase()}`,
+          ...value
+        })
+
+        done()
+
+      }
+
+    }
+
+  }
+
+  const next = () => {}
+
+  const actionWithCallback = {
+    ...action,
+    [type]: `${type.toUpperCase()}`
+  }
+
+  middleware(store)(next)(actionWithCallback)
+
+}
+
+const dispatchesSingleAction = (action, actionType, done) => {
 
   const store = {
     dispatch: (action) => {
@@ -154,7 +203,7 @@ const dispatchSingleAction = (action, actionType, done) => {
 
 }
 
-const dispatchMultipleActions = (action, actionType, done) => {
+const dispatchesMultipleActions = (action, actionType, done) => {
 
   const store = {
     dispatch: (action) => {
