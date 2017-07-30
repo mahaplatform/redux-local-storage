@@ -33,10 +33,9 @@ class Root extends React.Component {
   }
 
   render() {
-    const { children } = this.props
     return (
       <Provider store={ this.store }>
-        { children }
+        { this.props.children }
       </Provider>
     )
   }
