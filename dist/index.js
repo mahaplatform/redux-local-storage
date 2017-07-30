@@ -112,7 +112,7 @@ exports.default = function () {
               if (err) {
                 coerceArray(action.failure).map(function (failureAction) {
                   store.dispatch({
-                    type: namespace + '/' + failureAction,
+                    type: withNamespace(namespace, failureAction),
                     err: err
                   });
                 });
@@ -120,8 +120,7 @@ exports.default = function () {
 
               coerceArray(action.success).map(function (successAction) {
                 store.dispatch({
-                  type: namespace + '/' + successAction,
-                  key: action.key
+                  type: withNamespace(namespace, successAction)
                 });
               });
             });

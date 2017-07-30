@@ -88,7 +88,7 @@ export default (client = defaultClient) => {
         if(err) {
           coerceArray(action.failure).map(failureAction => {
             store.dispatch({
-              type: `${namespace}/${failureAction}`,
+              type: withNamespace(namespace, failureAction),
               err
             })
           })
@@ -96,7 +96,7 @@ export default (client = defaultClient) => {
 
         coerceArray(action.success).map(successAction => {
           store.dispatch({
-            type: `${namespace}/${successAction}`
+            type: withNamespace(namespace, successAction)
           })
         })
 

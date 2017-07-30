@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-type'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import createLocalStorage from 'redux-local-storage'
@@ -9,18 +10,22 @@ import reducer from './reducer'
 
 class Root extends React.Component {
 
+  static propTypes = {
+    children: PropTypes.any
+  }
+
   constructor(props) {
 
     super(props)
 
-    const loggerMiddleware = createLogger()
+    const loggerMiddleware = createLogger({ collapsed: true })
 
     const localStorageMiddleware = createLocalStorage()
 
     const createStoreWithMiddleware = applyMiddleware(
       thunkMiddleware,
-      loggerMiddleware,
-      localStorageMiddleware
+      localStorageMiddleware,
+      loggerMiddleware
     )(createStore)
 
     this.store = createStoreWithMiddleware(reducer)
@@ -28,9 +33,10 @@ class Root extends React.Component {
   }
 
   render() {
+    const { children } = this.props
     return (
       <Provider store={ this.store }>
-        { this.props.children }
+        { children }
       </Provider>
     )
   }

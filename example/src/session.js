@@ -8,7 +8,10 @@ class Session extends React.Component {
   static propTypes = {
     status: PropTypes.string,
     value: PropTypes.object,
-    onFetch: PropTypes.func
+    onFetch: PropTypes.func,
+    onGetSession: PropTypes.func,
+    onSetSession: PropTypes.func,
+    onRemoveSession: PropTypes.func
   }
 
   render() {

@@ -1,5 +1,7 @@
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _chai = require('chai');
 
 var _index = require('./index');
@@ -10,9 +12,36 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+var mockLocalStorage = {
+
+  setItem: function setItem(key, value, cb) {
+
+    var err = key === 'err' ? 'err' : null;
+
+    cb(err, value);
+  },
+
+  getItem: function getItem(key, cb) {
+
+    var err = key === 'err' ? 'err' : null;
+
+    cb(err, 'bar');
+  },
+
+  removeItem: function removeItem(key, cb) {
+
+    var err = key === 'err' ? 'err' : null;
+
+    cb(err);
+  }
+
+};
+
+var middleware = (0, _index2.default)(mockLocalStorage);
+
 describe('local middleware', function () {
 
-  it('allows non-api actions to pass through', function (done) {
+  it('allows non local actions to pass through', function (done) {
 
     var store = {};
 
@@ -24,46 +53,189 @@ describe('local middleware', function () {
       type: 'foo/BAR'
     };
 
-    (0, _index2.default)(mockRest)(store)(next)(action);
+    middleware(store)(next)(action);
   });
 
-  // it('dispatches as single request', (done) =>  dispatchSingleAction('request', done))
-  //
-  // it('dispatches as mulitple request', (done) =>  dispatchMultipleActions('request', done))
-  //
-  // it('dispatches as single success', (done) =>  dispatchSingleAction('success', done))
-  //
-  // it('dispatches as mulitple success', (done) =>  dispatchMultipleActions('success', done))
-  //
-  // it('dispatches as single failure', (done) =>  dispatchSingleAction('failure', done))
-  //
-  // it('dispatches as mulitple failure', (done) =>  dispatchMultipleActions('failure', done))
+  describe('set', function () {
+
+    var successAction = {
+      type: 'foo/LOCAL_SET',
+      key: 'foo',
+      value: 'bar'
+    };
+
+    var failureAction = {
+      type: 'foo/LOCAL_SET',
+      key: 'err',
+      value: 'err'
+    };
+
+    it('dispatches as single request', function (done) {
+      return dispatchesSingleAction(successAction, 'request', done);
+    });
+
+    it('dispatches as mulitple request', function (done) {
+      return dispatchesMultipleActions(successAction, 'request', done);
+    });
+
+    it('dispatches as single success', function (done) {
+      return dispatchesSingleAction(successAction, 'success', done);
+    });
+
+    it('dispatches as mulitple success', function (done) {
+      return dispatchesMultipleActions(successAction, 'success', done);
+    });
+
+    it('dispatches as single failure', function (done) {
+      return dispatchesSingleAction(failureAction, 'failure', done);
+    });
+
+    it('dispatches as mulitple failure', function (done) {
+      return dispatchesMultipleActions(failureAction, 'failure', done);
+    });
+
+    it('request returns appropriate value', function (done) {
+      return returnsAppropriateValue(successAction, 'request', { key: 'foo', value: 'bar' }, done);
+    });
+
+    it('success returns appropriate value', function (done) {
+      return returnsAppropriateValue(successAction, 'success', { value: 'bar' }, done);
+    });
+
+    it('failure returns appropriate value', function (done) {
+      return returnsAppropriateValue(failureAction, 'failure', { err: 'err' }, done);
+    });
+  });
+
+  describe('get', function () {
+
+    var successAction = {
+      type: 'foo/LOCAL_GET',
+      key: 'foo'
+    };
+
+    var failureAction = {
+      type: 'foo/LOCAL_GET',
+      key: 'err'
+    };
+
+    it('dispatches as single request', function (done) {
+      return dispatchesSingleAction(successAction, 'request', done);
+    });
+
+    it('dispatches as mulitple request', function (done) {
+      return dispatchesMultipleActions(successAction, 'request', done);
+    });
+
+    it('dispatches as single success', function (done) {
+      return dispatchesSingleAction(successAction, 'success', done);
+    });
+
+    it('dispatches as mulitple success', function (done) {
+      return dispatchesMultipleActions(successAction, 'success', done);
+    });
+
+    it('dispatches as single failure', function (done) {
+      return dispatchesSingleAction(failureAction, 'failure', done);
+    });
+
+    it('dispatches as mulitple failure', function (done) {
+      return dispatchesMultipleActions(failureAction, 'failure', done);
+    });
+
+    it('request returns appropriate value', function (done) {
+      return returnsAppropriateValue(successAction, 'request', { key: 'foo' }, done);
+    });
+
+    it('success returns appropriate value', function (done) {
+      return returnsAppropriateValue(successAction, 'success', { value: 'bar' }, done);
+    });
+
+    it('failure returns appropriate value', function (done) {
+      return returnsAppropriateValue(failureAction, 'failure', { err: 'err' }, done);
+    });
+  });
+
+  describe('remove', function () {
+
+    var successAction = {
+      type: 'foo/LOCAL_REMOVE',
+      key: 'foo'
+    };
+
+    var failureAction = {
+      type: 'foo/LOCAL_REMOVE',
+      key: 'err'
+    };
+
+    it('dispatches as single request', function (done) {
+      return dispatchesSingleAction(successAction, 'request', done);
+    });
+
+    it('dispatches as mulitple request', function (done) {
+      return dispatchesMultipleActions(successAction, 'request', done);
+    });
+
+    it('dispatches as single success', function (done) {
+      return dispatchesSingleAction(successAction, 'success', done);
+    });
+
+    it('dispatches as mulitple success', function (done) {
+      return dispatchesMultipleActions(successAction, 'success', done);
+    });
+
+    it('dispatches as single failure', function (done) {
+      return dispatchesSingleAction(failureAction, 'failure', done);
+    });
+
+    it('dispatches as mulitple failure', function (done) {
+      return dispatchesMultipleActions(failureAction, 'failure', done);
+    });
+
+    it('request returns appropriate value', function (done) {
+      return returnsAppropriateValue(successAction, 'request', { key: 'foo' }, done);
+    });
+
+    it('success returns appropriate value', function (done) {
+      return returnsAppropriateValue(successAction, 'success', {}, done);
+    });
+
+    it('failure returns appropriate value', function (done) {
+      return returnsAppropriateValue(failureAction, 'failure', { err: 'err' }, done);
+    });
+  });
 });
 
-var mockRest = function mockRest(options) {
-  return {
-    then: function then(fn) {
-      return {
-        then: function then(success, failure) {
+var returnsAppropriateValue = function returnsAppropriateValue(action, type, value, done) {
 
-          var response = {
-            entity: {}
-          };
+  var store = {
 
-          if (options.path == '/failure') return failure(response);
+    dispatch: function dispatch(action) {
 
-          success(response);
-        }
-      };
+      if (action.type === 'foo/' + type.toUpperCase()) {
+
+        (0, _chai.expect)(action).to.eql(_extends({
+          type: 'foo/' + type.toUpperCase()
+        }, value));
+
+        done();
+      }
     }
+
   };
+
+  var next = function next() {};
+
+  var actionWithCallback = _extends({}, action, _defineProperty({}, type, '' + type.toUpperCase()));
+
+  middleware(store)(next)(actionWithCallback);
 };
 
-var dispatchSingleAction = function dispatchSingleAction(type, done) {
+var dispatchesSingleAction = function dispatchesSingleAction(action, actionType, done) {
 
   var store = {
     dispatch: function dispatch(action) {
-      if (action.type === 'foo/FETCH_' + type.toUpperCase()) {
+      if (action.type === 'foo/' + actionType.toUpperCase()) {
         done();
       }
     }
@@ -71,20 +243,16 @@ var dispatchSingleAction = function dispatchSingleAction(type, done) {
 
   var next = function next() {};
 
-  var action = _defineProperty({
-    type: 'API_REQUEST',
-    namespace: 'foo',
-    endpoint: '/' + type
-  }, type, 'FETCH_' + type.toUpperCase());
+  var actionWithCallback = _extends({}, action, _defineProperty({}, actionType, actionType.toUpperCase()));
 
-  apiMiddleware(mockRest)(store)(next)(action);
+  middleware(store)(next)(actionWithCallback);
 };
 
-var dispatchMultipleActions = function dispatchMultipleActions(type, done) {
+var dispatchesMultipleActions = function dispatchesMultipleActions(action, actionType, done) {
 
   var store = {
     dispatch: function dispatch(action) {
-      if (action.type === 'foo/FETCH_${type.toUpperCase()}2') {
+      if (action.type === 'foo/${actionType.toUpperCase()}2') {
         done();
       }
     }
@@ -92,12 +260,9 @@ var dispatchMultipleActions = function dispatchMultipleActions(type, done) {
 
   var next = function next() {};
 
-  var action = {
-    type: 'API_REQUEST',
-    namespace: 'foo',
-    endpoint: '/' + type,
-    request: ['FETCH_${type.toUpperCase()}1', 'FETCH_${type.toUpperCase()}2']
-  };
+  var actionWithCallback = _extends({}, action, {
+    request: ['${actionType.toUpperCase()}1', '${actionType.toUpperCase()}2']
+  });
 
-  apiMiddleware(mockRest)(store)(next)(action);
+  middleware(store)(next)(actionWithCallback);
 };
