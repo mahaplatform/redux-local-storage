@@ -96,8 +96,7 @@ export default (client = defaultClient) => {
 
         coerceArray(action.success).map(successAction => {
           store.dispatch({
-            type: `${namespace}/${successAction}`,
-            key: action.key
+            type: `${namespace}/${successAction}`
           })
         })
 

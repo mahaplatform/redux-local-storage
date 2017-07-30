@@ -1,10 +1,41 @@
 
 import { expect } from 'chai'
+
 import localMiddleware from './index'
+
+const mockLocalStorage = {
+
+  setItem: (key, value, cb) => {
+
+    const err = (key === 'err') ? 'err' : null
+
+    cb(err, value)
+
+  },
+
+  getItem: (key, cb) => {
+
+    const err = (key === 'err') ? 'err' : null
+
+    cb(err, 'bar')
+
+  },
+
+  removeItem: (key, cb) => {
+
+    const err = (key === 'err') ? 'err' : null
+
+    cb(err)
+
+  }
+
+}
+
+const middleware = localMiddleware(mockLocalStorage)
 
 describe('local middleware', () => {
 
-  it('allows non-api actions to pass through', (done) => {
+  it('allows non local actions to pass through', (done) => {
 
     const store = {}
 
@@ -16,47 +47,97 @@ describe('local middleware', () => {
       type: 'foo/BAR'
     }
 
-    localMiddleware(mockRest)(store)(next)(action)
+    middleware(store)(next)(action)
 
   })
 
-  // it('dispatches as single request', (done) =>  dispatchSingleAction('request', done))
-  //
-  // it('dispatches as mulitple request', (done) =>  dispatchMultipleActions('request', done))
-  //
-  // it('dispatches as single success', (done) =>  dispatchSingleAction('success', done))
-  //
-  // it('dispatches as mulitple success', (done) =>  dispatchMultipleActions('success', done))
-  //
-  // it('dispatches as single failure', (done) =>  dispatchSingleAction('failure', done))
-  //
-  // it('dispatches as mulitple failure', (done) =>  dispatchMultipleActions('failure', done))
+  describe('set', () => {
+
+    const successAction = {
+      type: 'foo/LOCAL_SET',
+      key: 'foo',
+      value: 'bar'
+    }
+
+    const errorAction = {
+      type: 'foo/LOCAL_SET',
+      key: 'err',
+      value: 'err'
+    }
+
+    it('dispatches as single request', (done) =>  dispatchSingleAction(successAction, 'request', done))
+
+    it('dispatches as mulitple request', (done) =>  dispatchMultipleActions(successAction, 'request', done))
+
+    it('dispatches as single success', (done) =>  dispatchSingleAction(successAction, 'success', done))
+
+    it('dispatches as mulitple success', (done) =>  dispatchMultipleActions(successAction, 'success', done))
+
+    it('dispatches as single failure', (done) =>  dispatchSingleAction(errorAction, 'failure', done))
+
+    it('dispatches as mulitple failure', (done) =>  dispatchMultipleActions(errorAction, 'failure', done))
+
+  })
+
+  describe('get', () => {
+
+    const successAction = {
+      type: 'foo/LOCAL_GET',
+      key: 'foo'
+    }
+
+    const errorAction = {
+      type: 'foo/LOCAL_GET',
+      key: 'err'
+    }
+
+    it('dispatches as single request', (done) =>  dispatchSingleAction(successAction, 'request', done))
+
+    it('dispatches as mulitple request', (done) =>  dispatchMultipleActions(successAction, 'request', done))
+
+    it('dispatches as single success', (done) =>  dispatchSingleAction(successAction, 'success', done))
+
+    it('dispatches as mulitple success', (done) =>  dispatchMultipleActions(successAction, 'success', done))
+
+    it('dispatches as single failure', (done) =>  dispatchSingleAction(errorAction, 'failure', done))
+
+    it('dispatches as mulitple failure', (done) =>  dispatchMultipleActions(errorAction, 'failure', done))
+
+  })
+
+  describe('remove', () => {
+
+    const successAction = {
+      type: 'foo/LOCAL_REMOVE',
+      key: 'foo'
+    }
+
+    const errorAction = {
+      type: 'foo/LOCAL_REMOVE',
+      key: 'err'
+    }
+
+    it('dispatches as single request', (done) =>  dispatchSingleAction(successAction, 'request', done))
+
+    it('dispatches as mulitple request', (done) =>  dispatchMultipleActions(successAction, 'request', done))
+
+    it('dispatches as single success', (done) =>  dispatchSingleAction(successAction, 'success', done))
+
+    it('dispatches as mulitple success', (done) =>  dispatchMultipleActions(successAction, 'success', done))
+
+    it('dispatches as single failure', (done) =>  dispatchSingleAction(errorAction, 'failure', done))
+
+    it('dispatches as mulitple failure', (done) =>  dispatchMultipleActions(errorAction, 'failure', done))
+
+  })
 
 })
 
-const mockRest = (options) => {
-  return ({
-    then: (fn) => ({
-      then: (success, failure) => {
-
-        const response = {
-          entity: {}
-        }
-
-        if(options.path == '/failure') return failure(response)
-
-        success(response)
-
-      }
-    })
-  })
-}
-
-const dispatchSingleAction = (type, done) => {
+const dispatchSingleAction = (action, actionType, done) => {
 
   const store = {
     dispatch: (action) => {
-      if(action.type === `foo/FETCH_${type.toUpperCase()}`) {
+      if(action.type === `foo/${actionType.toUpperCase()}`) {
         done()
       }
     }
@@ -64,22 +145,20 @@ const dispatchSingleAction = (type, done) => {
 
   const next = () => {}
 
-  const action = {
-    type: 'API_REQUEST',
-    namespace: 'foo',
-    endpoint: `/${type}`,
-    [type]: `FETCH_${type.toUpperCase()}`
+  const actionWithCallback = {
+    ...action,
+    [actionType]: actionType.toUpperCase()
   }
 
-  apiMiddleware(mockRest)(store)(next)(action)
+  middleware(store)(next)(actionWithCallback)
 
 }
 
-const dispatchMultipleActions = (type, done) => {
+const dispatchMultipleActions = (action, actionType, done) => {
 
   const store = {
     dispatch: (action) => {
-      if(action.type === 'foo/FETCH_${type.toUpperCase()}2') {
+      if(action.type === 'foo/${actionType.toUpperCase()}2') {
         done()
       }
     }
@@ -87,13 +166,11 @@ const dispatchMultipleActions = (type, done) => {
 
   const next = () => {}
 
-  const action = {
-    type: 'API_REQUEST',
-    namespace: 'foo',
-    endpoint: `/${type}`,
-    request: ['FETCH_${type.toUpperCase()}1','FETCH_${type.toUpperCase()}2']
+  const actionWithCallback = {
+    ...action,
+    request: ['${actionType.toUpperCase()}1','${actionType.toUpperCase()}2']
   }
 
-  apiMiddleware(mockRest)(store)(next)(action)
+  middleware(store)(next)(actionWithCallback)
 
 }
