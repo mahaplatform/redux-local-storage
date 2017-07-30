@@ -10,8 +10,7 @@
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "jsx": true
+      "experimentalObjectRestSpread": true
     },
     "sourceType": "module"
   },
@@ -48,8 +47,6 @@
       "error",
       "single"
     ],
-    "react/jsx-uses-react":  "error",
-    "react/jsx-uses-vars":  "error",
     "semi": [
       "error",
       "never"
