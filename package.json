@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -rf ./dist && babel ./src --out-dir ./dist",
-    "test": "NODE_ENV=test NODE_PATH=./src mocha --recursive --require babel-core/register ./src/tests.js"
+    "test": "NODE_ENV=test NODE_PATH=./src nyc --reporter=lcov --reporter=text --recursive --require babel-core/register mocha ./src/tests.js"
   },
   "repository": {
     "type": "git",
@@ -37,7 +37,8 @@
     "chai": "^3.5.0",
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^7.1.0",
-    "mocha": "^3.3.0"
+    "mocha": "^3.3.0",
+    "nyc": "^11.1.0"
   },
   "dependencies": {
     "localforage": "^1.5.0",
