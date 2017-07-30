@@ -13,9 +13,7 @@ module.exports = (env) => ({
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      minChunks: (module) => {
-        return module.context && module.context.indexOf('node_modules') !== -1;
-      }
+      minChunks: (module) => module.context && module.context.indexOf('node_modules') !== -1
     }),
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, 'dist', 'index.html'),
