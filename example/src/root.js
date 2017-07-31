@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-type'
+import PropTypes from 'prop-types'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import createLocalStorage from 'redux-local-storage'
