@@ -16,7 +16,7 @@ Redux middleware for accessing local storage
 Install with [npm](http://npmjs.com) or [yarn](https://yarnpkg.com):
 
 ```sh
-npm install --save redux-api-request
+npm install --save redux-local-storage
 ```
 
 ## Usage
