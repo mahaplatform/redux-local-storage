@@ -13,7 +13,7 @@ export default (client = defaultClient) => {
 
     const [, namespace, type] = action.type.match(/([\a-z0-9_\.]*)?\/?([A-Z0-9_]*)/)
 
-   const cid = (action.cid) ? { cid: action.cid } : {}
+    const cid = (action.cid) ? { cid: action.cid } : {}
 
     switch (type) {
 
@@ -22,6 +22,7 @@ export default (client = defaultClient) => {
       coerceArray(action.request).map(requestAction => {
         store.dispatch({
           type: withNamespace(namespace, requestAction),
+          ...action.meta,
           ...cid,
           key: action.key,
           value: action.value
@@ -34,6 +35,7 @@ export default (client = defaultClient) => {
           coerceArray(action.failure).map(failureAction => {
             store.dispatch({
               type: withNamespace(namespace, failureAction),
+              ...action.meta,
               ...cid,
               err
             })
@@ -43,6 +45,7 @@ export default (client = defaultClient) => {
         coerceArray(action.success).map(successAction => {
           store.dispatch({
             type: withNamespace(namespace, successAction),
+            ...action.meta,
             ...cid,
             value
           })
@@ -55,6 +58,7 @@ export default (client = defaultClient) => {
       coerceArray(action.request).map(requestAction => {
         store.dispatch({
           type: withNamespace(namespace, requestAction),
+          ...action.meta,
           ...cid,
           key: action.key
         })
@@ -66,6 +70,7 @@ export default (client = defaultClient) => {
           coerceArray(action.failure).map(failureAction => {
             store.dispatch({
               type: withNamespace(namespace, failureAction),
+              ...action.meta,
               ...cid,
               err
             })
@@ -75,6 +80,7 @@ export default (client = defaultClient) => {
         coerceArray(action.success).map(successAction => {
           store.dispatch({
             type: withNamespace(namespace, successAction),
+            ...action.meta,
             ...cid,
             value
           })
@@ -87,6 +93,7 @@ export default (client = defaultClient) => {
       coerceArray(action.request).map(requestAction => {
         store.dispatch({
           type: withNamespace(namespace, requestAction),
+          ...action.meta,
           ...cid,
           key: action.key
         })
@@ -98,6 +105,7 @@ export default (client = defaultClient) => {
           coerceArray(action.failure).map(failureAction => {
             store.dispatch({
               type: withNamespace(namespace, failureAction),
+              ...action.meta,
               ...cid,
               err
             })
@@ -107,6 +115,7 @@ export default (client = defaultClient) => {
         coerceArray(action.success).map(successAction => {
           store.dispatch({
             type: withNamespace(namespace, successAction),
+            ...action.meta,
             ...cid
           })
         })

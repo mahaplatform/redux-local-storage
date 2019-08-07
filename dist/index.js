@@ -50,7 +50,7 @@ exports.default = function () {
             coerceArray(action.request).map(function (requestAction) {
               store.dispatch(_extends({
                 type: withNamespace(namespace, requestAction)
-              }, cid, {
+              }, action.meta, cid, {
                 key: action.key,
                 value: action.value
               }));
@@ -62,7 +62,7 @@ exports.default = function () {
                 coerceArray(action.failure).map(function (failureAction) {
                   store.dispatch(_extends({
                     type: withNamespace(namespace, failureAction)
-                  }, cid, {
+                  }, action.meta, cid, {
                     err: err
                   }));
                 });
@@ -71,7 +71,7 @@ exports.default = function () {
               coerceArray(action.success).map(function (successAction) {
                 store.dispatch(_extends({
                   type: withNamespace(namespace, successAction)
-                }, cid, {
+                }, action.meta, cid, {
                   value: value
                 }));
               });
@@ -82,7 +82,7 @@ exports.default = function () {
             coerceArray(action.request).map(function (requestAction) {
               store.dispatch(_extends({
                 type: withNamespace(namespace, requestAction)
-              }, cid, {
+              }, action.meta, cid, {
                 key: action.key
               }));
             });
@@ -93,7 +93,7 @@ exports.default = function () {
                 coerceArray(action.failure).map(function (failureAction) {
                   store.dispatch(_extends({
                     type: withNamespace(namespace, failureAction)
-                  }, cid, {
+                  }, action.meta, cid, {
                     err: err
                   }));
                 });
@@ -102,7 +102,7 @@ exports.default = function () {
               coerceArray(action.success).map(function (successAction) {
                 store.dispatch(_extends({
                   type: withNamespace(namespace, successAction)
-                }, cid, {
+                }, action.meta, cid, {
                   value: value
                 }));
               });
@@ -113,7 +113,7 @@ exports.default = function () {
             coerceArray(action.request).map(function (requestAction) {
               store.dispatch(_extends({
                 type: withNamespace(namespace, requestAction)
-              }, cid, {
+              }, action.meta, cid, {
                 key: action.key
               }));
             });
@@ -124,7 +124,7 @@ exports.default = function () {
                 coerceArray(action.failure).map(function (failureAction) {
                   store.dispatch(_extends({
                     type: withNamespace(namespace, failureAction)
-                  }, cid, {
+                  }, action.meta, cid, {
                     err: err
                   }));
                 });
@@ -133,7 +133,7 @@ exports.default = function () {
               coerceArray(action.success).map(function (successAction) {
                 store.dispatch(_extends({
                   type: withNamespace(namespace, successAction)
-                }, cid));
+                }, action.meta, cid));
               });
             });
 
