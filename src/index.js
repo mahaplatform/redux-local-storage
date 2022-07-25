@@ -40,16 +40,18 @@ export default (client = defaultClient) => {
               err
             })
           })
-        }
-
-        coerceArray(action.success).map(successAction => {
-          store.dispatch({
-            type: withNamespace(namespace, successAction),
-            ...action.meta,
-            ...cid,
-            value
+          if(action.onFailure) action.onFailure(err)
+        } else {
+          coerceArray(action.success).map(successAction => {
+            store.dispatch({
+              type: withNamespace(namespace, successAction),
+              ...action.meta,
+              ...cid,
+              value
+            })
           })
-        })
+          if(action.onSuccess) action.onSuccess(value)
+        }
 
       })
 
@@ -75,16 +77,18 @@ export default (client = defaultClient) => {
               err
             })
           })
-        }
-
-        coerceArray(action.success).map(successAction => {
-          store.dispatch({
-            type: withNamespace(namespace, successAction),
-            ...action.meta,
-            ...cid,
-            value
+          if(action.onFailure) action.onFailure(result)
+        } else {
+          coerceArray(action.success).map(successAction => {
+            store.dispatch({
+              type: withNamespace(namespace, successAction),
+              ...action.meta,
+              ...cid,
+              value
+            })
           })
-        })
+          if(action.onSuccess) action.onSuccess(value)
+        }
 
       })
 
@@ -110,15 +114,17 @@ export default (client = defaultClient) => {
               err
             })
           })
-        }
-
-        coerceArray(action.success).map(successAction => {
-          store.dispatch({
-            type: withNamespace(namespace, successAction),
-            ...action.meta,
-            ...cid
+          if(action.onFailure) action.onFailure(err)
+        } else {
+          coerceArray(action.success).map(successAction => {
+            store.dispatch({
+              type: withNamespace(namespace, successAction),
+              ...action.meta,
+              ...cid
+            })
           })
-        })
+          if(action.onSuccess) action.onSuccess(value)
+        }
 
       })
 
